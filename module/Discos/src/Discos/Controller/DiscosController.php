@@ -49,7 +49,7 @@ class DiscosController extends AbstractActionController {
                 $disco->exchangeArray( $form->getData() );
                 $this->getDiscosTable()->saveDiscos( $disco );
                 
-                return $this->redirect()->toRoute('discos');
+                return $this->redirect()->toRoute('album');
             }
         }
         
