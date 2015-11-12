@@ -54,16 +54,75 @@ class DiscosController extends AbstractActionController {
         }
         
         return array('form' => $form );
-        
+       
     }
 
     public function editAction() {
+        $id = (int) $this->params()->fromRoute('id', 0 );
         
+        if( !$id ){
+            return $this->redirect()->toRoute( array('album', array('action' => 'add')));
+        }
+        
+        try{
+            $disco = $this->getDiscosTable()->getDisco( $id );
+            
+            
+        } catch ( \Exception $ex) {
+            return $this->redirect()->toRoute('album', array( 'action' => 'index') );               
+
+        }
+        
+        $form = new DiscosForm();
+        
+        $form->bind( $disco );
+        $form->get('submit')->setAttribute('value', 'Editar');
+        
+        $request = $this->getRequest();
+        
+        if( $request->isPost() )
+        {
+            $form = $form->setInputFilter( $disco->getInputFilter() );
+            $form->setData( $request->getPost() );
+            
+            if( $form->isValid() ){
+                $this->getDiscosTable()->saveDiscos( $disco );
+                
+                return $this->redirect()->toRoute('album');
+            }
+            
+        }
+        return array(
+            'id' => $id,
+            'form' => $form
+        );
     }
     
     public function deleteAction()
     {
+        $id = (int) $this->params()->fromRoute('id', 0 );
         
+        if( !$id )
+        {
+            return $this->redirect()->toRoute('album');
+        }
+        
+        $request = $this->getRequest();
+        
+        if( $request->isPost() ){
+            $del = $request->getPost('del', 'No');
+            if( $del === 'Sim' ){
+                $id = (int) $request->getPost('id');
+                $this->getDiscosTable()->deleteDiscos( $id );
+            }
+            
+            return $this->redirect()->toRoute('album');
+        }
+        
+        return array(
+            'id' => $id,
+            'disco' => $this->getDiscosTable()->getDisco( $id )
+        );
     }
 
 }

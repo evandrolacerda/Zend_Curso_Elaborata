@@ -19,6 +19,11 @@ class Discos implements InputFilterAwareInterface {
         $this->cantor = ( isset($data['cantor']) ? $data['cantor'] : null );
         $this->disco = ( isset($data['disco']) ? $data['disco'] : null );
     }
+    
+    public function getArrayCopy()
+    {
+        return get_object_vars( $this );
+    }
 
     public function getInputFilter() {
         if (!$this->inputFilter) {

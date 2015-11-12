@@ -37,7 +37,7 @@ class DiscosTable
         {
             $this->tableGateway->insert($data);            
         }else{
-            if( $this->getDiscos( $id ) ){
+            if( $this->getDisco( $id ) ){
                 $this->tableGateway->update($data, array('id' => $id ));
             }else{
                 throw new \Exception('Disco id nao existe');
@@ -48,6 +48,19 @@ class DiscosTable
     public function deleteDiscos( $id )
     {
         $this->tableGateway->delete( array( 'id' => $id ) );
+    }
+    
+    public function getDisco( $id )
+    {
+        $id = (int) $id;
+        
+        $rowset = $this->tableGateway->select( array( 'id' => $id ) );
+        $row = $rowset->current();
+        if( !$row )
+        {
+            throw new \Exception('Não foi Possível encontrar o registro com id ' .$id );
+        }
+        return $row;
     }
     
     

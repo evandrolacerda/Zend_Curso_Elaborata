@@ -9,6 +9,7 @@ class DiscosForm  extends Form{
     {
         parent::__construct('discos');
         
+        
         $this->setAttribute('method', 'post');
         
         $this->add( array(
